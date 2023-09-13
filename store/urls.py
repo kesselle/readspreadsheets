@@ -1,7 +1,12 @@
 from django.urls import path
-from . views import Exceluploadfile
+from readspreadsheets import settings
+from store import views
+from django.conf.urls.static import static
 
 
 urlpatterns =[
-    path('upload-excel', Exceluploadfile.as_view(), name='upload-excel'),
+    
+    path('import_excel/', views.importExcel, name='import_excel')
 ]
+if settings.DEBUG:
+    urlpatterns+= static(settings.STATIC_URL, document_root = settings.STATIC_ROOT)

@@ -1,27 +1,38 @@
-from rest_framework.views import APIView
-from rest_framework.parsers import MultiPartParser, FormParser
-from rest_framework.response import Response
-from rest_framework import status
-import pandas as pd  # Import pandas
+import pandas as pd
+from django.shortcuts import render
+from store.models import Product
+from django.core.files.storage import FileSystemStorage
+from tablib import Dataset
 
-class ExcelUploadView(APIView):
-    parser_classes = (MultiPartParser, FormParser)
+def importExcel(request):
+    uploaded_file_url = None
 
-    def post(self, request):
-        file = request.data.get('file')
-        if not file:
-            return Response({'error': 'File not provided'}, status=status.HTTP_400_BAD_REQUEST)
+    if request.method == 'POST' and request.FILES['myfile']:
+        myfile = request.FILES['myfile']
+        fs = FileSystemStorage()
+        filename = fs.save(myfile.name, myfile)
+        uploaded_file_url = fs.url(filename)
 
-        try:
-            # Use pandas to read the Excel file
-            df = pd.read_excel(file)
+        if filename.endswith('.xlsx'):
+            empexceldata = pd.read_excel(filename)
+        elif filename.endswith('.csv'):
+            empexceldata = pd.read_csv(filename)
+        else:
+            # Handle unsupported file formats here
+            pass
 
-            # Process and validate the data as needed
-            # You can iterate through df rows and save them to the database
-            for index, row in df.iterrows():
-                # Perform validation and database insertion here
+        for row in empexceldata.itertuples():
+            try:
+                obj = Product.objects.create(
+                    
+                    item=row.item,
+                    quantity=row.quantity,
+                    amount=row.amount,
+                    date=row.date
+                )
+                obj.save()
+            except ValueError as e:
+                # Handle the error gracefully, e.g., log it or skip the problematic row
+                print(f"Error importing row: {e}")
 
-             return Response({'message': 'Data saved successfully'}, status=status.HTTP_201_CREATED)
-
-        except Exception as e:
-            return Response({'error': str(e)}, status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+    return render(request, 'hello.html', {'uploaded_file_url': uploaded_file_url})
