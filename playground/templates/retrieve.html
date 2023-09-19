@@ -1,0 +1,75 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <style>
+        /* Style for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        /* Style for table headers */
+        th {
+            background-color: #f2f2f2; /* Gray background color */
+        }
+
+        /* Style for table header text */
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Style every other row with a light background color */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect on rows */
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <h1>Customer Data</h1>
+    <form method="get" action="{% url 'get_data' %}">
+        <label for="date_filter">Filter by Date:</label>
+        <input type="date" id="date_filter" name="date_filter">
+        <button type="submit">Filter and Export</button>
+    </form>
+
+    <table>
+        <thead>
+            <tr>
+                <th>ID</th>
+                <th>First Name</th>
+                <th>Last Name</th>
+                <th>Email</th>
+                <th>Gender</th>
+                <th>Date</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in data %}
+                <tr>
+                    <td>{{ item.id }}</td>
+                    <td>{{ item.first_name }}</td>
+                    <td>{{ item.last_name }}</td>
+                    <td>{{ item.email }}</td>
+                    <td>{{ item.gender }}</td>
+                    <td>{{ item.date }}</td>
+                </tr>
+            {% empty %}
+                <tr>
+                    <td colspan="6">No data available.</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    <a href="{% url 'get_data' %}?export_csv">Export All Data as CSV</a>
+</body>
+</html>

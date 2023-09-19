@@ -1,0 +1,42 @@
+{% load static %}
+<!DOCTYPE html>
+
+<html lang="en">
+ 
+<head>
+    <meta charset="UTF-8">
+    <title>Edit</title>
+    <link rel="stylesheet" href="{% static 'cs/bootstrap.min.css' %}">
+</head>
+<body>
+    <form  method="post" class="post-form" action="/displayTable/">
+    <div class="container">
+        <br>
+        <div  class="form-group row">
+            <label class="col-sm-1 col-form-label"></label>
+            <div class="col-sm-4">
+              <h3>Enter Details</h3>
+            </div>
+        </div>
+        <div class="form-group row">
+        <label class="col-sm-2 col-form-label">item:</label>
+        <div class="col-sm-4">
+            {{ form.item }}
+         <label class="col-sm-2 col-form-label">quantity:</label>
+         <div class="col-sm-4">
+                {{ form.quantity }}
+         <label class="col-sm-2 col-form-label">amount:</label>
+        <div class="col-sm-4">
+                {{ form.amount }}
+                    <label class="col-sm-2 col-form-label">date:</label>
+                    <div class="col-sm-4">
+                        {{ form.date }}                    
+        </div>
+        </div>
+    </div>
+    </form>
+</body>
+</html>
+
+
+</html>

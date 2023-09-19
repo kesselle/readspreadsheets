@@ -1,9 +1,14 @@
 from django import forms
-from . models import Product
+from . models import Product, Customer
 
 
 
-class ProductForm(forms.Form):
-    class meta:
+class ProductForm(forms.ModelForm):
+    class Meta:
         model = Product
-        fields = '__all__'
+        fields = ['item', 'quantity', 'amount', 'date']
+
+class CustomerForm(forms.ModelForm):
+    class Meta:
+        model=Customer
+        fields= ['first_name', 'last_name', 'email', 'gender', 'date']

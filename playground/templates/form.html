@@ -1,0 +1,98 @@
+{% load static %}
+<!doctype html>
+<html>
+<head>
+    <style>
+        /* Style for the table */
+        table {
+            border-collapse: collapse;
+            width: 100%;
+            border: 1px solid #ddd;
+        }
+
+        /* Style for table headers */
+        th {
+            background-color: #f2f2f2; /* Gray background color */
+        }
+
+        /* Style for table header text */
+        th, td {
+            padding: 8px;
+            text-align: left;
+            border-bottom: 1px solid #ddd;
+        }
+
+        /* Style every other row with a light background color */
+        tr:nth-child(even) {
+            background-color: #f2f2f2;
+        }
+
+        /* Hover effect on rows */
+        tr:hover {
+            background-color: #ddd;
+        }
+    </style>
+</head>
+<body>
+    <table>
+        <tr>
+            <th>id</th>
+            <th>Item</th>
+            <th>Quantity</th>
+            <th>Amount</th>
+            <th>Date</th>
+            <th>action</th>
+        </tr>
+        {% for product in tablelist %}
+        <tr>
+            <td>{{ product.id }}</td>
+            <td>{{ product.item }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>{{ product.amount }}</td>
+            <td>{{ product.date }}</td>
+            <td> 
+                <a href="{% url 'edit_table' product.id %}" >Edit</a>
+                <a href="{% url 'delete_table' product.id %}">Delete</a>
+            </td>
+        </tr>
+        
+        {% endfor %}
+    </table>
+
+    <canvas id="myChart"></canvas>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        console.log(tableData);
+        document.addEventListener("DOMContentLoaded", function () {
+          const tableData = JSON.parse('{{ tablelist | safe }}'); // You should populate this with your table data
+          const labels = tableData.map((row) => row.item); // Example: Get item names as labels
+          const quantities = tableData.map((row) => row.quantity); // Example: Get quantity as data
+      
+          const ctx = document.getElementById("myChart").getContext("2d");
+          const myChart = new Chart(ctx, {
+            type: "bar",
+            data: {
+              labels: labels,
+              datasets: [
+                {
+                  label: "Quantity",
+                  data: quantities,
+                  backgroundColor: "rgba(75, 192, 192, 0.2)", // Bar color
+                  borderColor: "rgba(75, 192, 192, 1)", // Border color
+                  borderWidth: 1,
+                },
+              ],
+            },
+            options: {
+              scales: {
+                y: {
+                  beginAtZero: true,
+                },
+              },
+            },
+          });
+        });
+      </script>
+      
+</body>
+</html>

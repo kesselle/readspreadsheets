@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'corsheaders',
     'store',
     'rest_framework',
-    'playground'
+    'playground',
+    
 ]
 
 MIDDLEWARE = [
